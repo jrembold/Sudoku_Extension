@@ -1,16 +1,15 @@
 ## Generating the starting board, generate a solution and then show partially completed to screen - Cameron
 
-## goal: 6 lists which each represent a row of 6 numbers
-
 import random
-import numpy as np
 
+# set numbers to letter in a dictionary so that we can shift the key 
 abc = {'a': 1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6}
 
 
 def Shift_dictionary( ):
     '''
-    Docstring!
+    This function shifts the abc dictionary by a random number.
+
     input:
         none
     output:
@@ -26,7 +25,8 @@ def Shift_dictionary( ):
 
 def Apply_shift(abcnew):
     '''
-    docstring! 
+    Applies shift to the known sudoku solution.
+
     input:
         abcnew (dict): shifted dictionary
     output:
@@ -44,7 +44,8 @@ def Apply_shift(abcnew):
 
 def Mix_rows(rowsnew):
     '''
-    Docstring!
+    Mixes the rows. 
+
     input:
         rowsnew (tuple): tuple of rows with shifted values
     output:
@@ -59,14 +60,19 @@ def Mix_rows(rowsnew):
             newmix = mix - 6
             rowsmixed += (rowsnew[i+ newmix], )
         else:
-            rowsmixed += (rowsnew[row], )
+            rowsmixed += (rowsnew[i+ mix], )
 
     return rowsmixed
 
 
 def Generate_unique_board( ):
     ''' 
-    Docstring!
+    runs the above functions
+
+    input:
+        none
+    output:
+        UniqueBoard (tuple): tuple of rows
     '''
     newdict = Shift_dictionary( )
     shiftedabc = Apply_shift(newdict)
