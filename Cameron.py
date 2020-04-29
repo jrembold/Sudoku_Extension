@@ -1,12 +1,77 @@
+## Generating the starting board, generate a solution and then show partially completed to screen - Cameron
+
+## goal: 6 lists which each represent a row of 6 numbers
+
+import random
+import numpy as np
+
 abc = {'a': 1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6}
 
-# set deafult rows to 6 items
-r1 = [abc['d'], abc['e'], abc['f'], abc['b'], abc['a'], abc['c']]
-r2 = [abc['c'], abc['a'], abc['b'], abc['e'], abc['d'], abc['f']]
-r3 = [abc['e'], abc['d'], abc['c'], abc['a'], abc['f'], abc['b']]
-r4 = [abc['f'], abc['b'], abc['a'], abc['c'], abc['d'], abc['d']]
-r5 = [abc['b'], abc['f'], abc['e'], abc['d'], abc['c'], abc['a']]
-r6 = [abc['a'], abc['c'], abc['d'], abc['f'], abc['b'], abc['e']]
 
-# tuple of rows
-rows = (r1, r2, r3, r4, r5, r6)
+def Shift_dictionary( ):
+    '''
+    Docstring!
+    input:
+        none
+    output:
+        abc (dict): shifted num dictionary
+    '''
+    shift = random.randint(1,6)
+    for key in abc:
+        abc[key] += shift
+        if abc[key] > 6:
+            abc[key] -= 6
+    return abc
+
+
+def Apply_shift(abcnew):
+    '''
+    docstring! 
+    input:
+        abcnew (dict): shifted dictionary
+    output:
+        rows (tuple): tuple of lists with shifted row elements
+    '''
+    r1 = [abcnew['d'], abcnew['e'], abcnew['f'], abcnew['b'], abcnew['a'], abcnew['c']]
+    r2 = [abcnew['c'], abcnew['a'], abcnew['b'], abcnew['e'], abcnew['d'], abcnew['f']]
+    r3 = [abcnew['e'], abcnew['d'], abcnew['c'], abcnew['a'], abcnew['f'], abcnew['b']]
+    r4 = [abcnew['f'], abcnew['b'], abcnew['a'], abcnew['c'], abcnew['e'], abcnew['d']]
+    r5 = [abcnew['b'], abcnew['f'], abcnew['e'], abcnew['d'], abcnew['c'], abcnew['a']]
+    r6 = [abcnew['a'], abcnew['c'], abcnew['d'], abcnew['f'], abcnew['b'], abcnew['e']]
+    rows = (r1, r2, r3, r4, r5, r6)
+    return rows
+
+
+def Mix_rows(rowsnew):
+    '''
+    Docstring!
+    input:
+        rowsnew (tuple): tuple of rows with shifted values
+    output:
+        rowsmixed (tuple): the same rows but in a different order
+
+    '''
+    rowsmixed = ( )
+    mix = random.randint(0,6)
+    for i in range(0,6):
+        row = i + 1
+        if (mix + row) >= 6:
+            newmix = mix - 6
+            rowsmixed += (rowsnew[i+ newmix], )
+        else:
+            rowsmixed += (rowsnew[row], )
+
+    return rowsmixed
+
+
+def Generate_unique_board( ):
+    ''' 
+    Docstring!
+    '''
+    newdict = Shift_dictionary( )
+    shiftedabc = Apply_shift(newdict)
+    UniqueBoard = Mix_rows(shiftedabc)
+
+    return UniqueBoard
+
+print(Generate_unique_board())
