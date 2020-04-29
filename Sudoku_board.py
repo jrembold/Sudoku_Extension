@@ -16,8 +16,8 @@ ROW_COUNT = 6
 COLUMN_COUNT = 6
 
 # This sets the WIDTH and HEIGHT of each grid location
-WIDTH = 30
-HEIGHT = 30
+WIDTH = 100
+HEIGHT = 100
 
 # This sets the margin between each cell
 # and on the edges of the screen.
@@ -44,16 +44,16 @@ class MyGame(arcade.Window):
         self.num_key = 0
 
         self.num_list = []
-        self.zero = arcade.Sprite('Numbers/0.png',  scale= 0.2)
-        self.one = arcade.Sprite('Numbers/1.png', scale= 0.2)
-        self.two = arcade.Sprite('Numbers/2.png', scale= 0.2)
-        self.three = arcade.Sprite('Numbers/3.png',scale= 0.2)
-        self.four = arcade.Sprite('Numbers/4.png',  scale= 0.2)
-        self.five = arcade.Sprite('Numbers/5.png',  scale= 0.2)
-        self.six = arcade.Sprite('Numbers/6.png',  scale= 0.2)
-        #self.seven = arcade.Sprite('Numbers/7.png', scale= 0.2)
-        #self.eight = arcade.Sprite('Numbers/8.png', scale= 0.2)
-        #self.nine = arcade.Sprite('Numbers/9.png',  scale= 0.2)
+        self.zero = arcade.Sprite('Numbers/0.png')
+        self.one = arcade.Sprite('Numbers/1.png') 
+        self.two = arcade.Sprite('Numbers/2.png')
+        self.three = arcade.Sprite('Numbers/3.png')
+        self.four = arcade.Sprite('Numbers/4.png')
+        self.five = arcade.Sprite('Numbers/5.png')
+        self.six = arcade.Sprite('Numbers/6.png')
+        #self.seven = arcade.Sprite('Numbers/7.png')
+        #self.eight = arcade.Sprite('Numbers/8.png')
+        #self.nine = arcade.Sprite('Numbers/9.png')
         self.num_list.append(self.zero)
         self.num_list.append(self.one)
         self.num_list.append(self.two)
@@ -111,6 +111,8 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, mod):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
+
+        #don't use NUM_whatever bc that's a number pad
         
         elif key == arcade.key.KEY_1:
             self.num_key = 1
