@@ -10,6 +10,7 @@ If Python and Arcade are installed, this example can be run from the command lin
 python -m arcade.examples.array_backed_grid_buffered
 """
 import arcade
+import Cameron
 
 # Set how many rows and columns we will have
 ROW_COUNT = 6
@@ -69,23 +70,34 @@ class MyGame(arcade.Window):
 
         # Create a 2 dimensional array. A two dimensional
         # array is simply a list of lists.
-        self.grid = []
-        for row in range(ROW_COUNT):
-            # Add an empty array that will hold each cell
-            # in this row
-            self.grid.append([])
-            for column in range(COLUMN_COUNT):
-                self.grid[row].append(0)  # Append a cell
 
-        arcade.set_background_color(arcade.color.BLACK)
-        self.recreate_grid()
+        ## ANSWER KEY ##
+        self.grid = Cameron.Generate_unique_board()
+        
+        ## EMPTY BOARD ##
+        #self.grid = []
+        #for row in range(ROW_COUNT):
+        #    # Add an empty array that will hold each cell
+        #    # in this row
+        #    self.grid.append([])
+        #    for column in range(COLUMN_COUNT):
+        #        self.grid[row].append(0)  # Append a cell
+
+        #arcade.set_background_color(arcade.color.BLACK)
+        #self.recreate_grid()
 
     #Changing the color of the squares and placing them
     def recreate_grid(self):
+        '''
+        This takes a list of numbers for each row/column
+        and populates a SpriteList based on what is in each row/column
+
+        '''
         #self.shape_list = arcade.ShapeElementList()
-        print(self.num_key)
-        print(self.grid)
-        print(len(self.print_numlist))
+        print(self.num_key) #key pressed
+        print(self.grid) #answer grid
+
+
         self.print_numlist = arcade.SpriteList()
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
@@ -109,6 +121,10 @@ class MyGame(arcade.Window):
         self.print_numlist.draw()
 
     def on_key_press(self, key, mod):
+        '''
+        The user will press a number on their keyboard
+        that number will be used to generate a new sprite
+        '''
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
@@ -153,6 +169,8 @@ class MyGame(arcade.Window):
     def on_mouse_press(self, x, y, button, modifiers):
         """
         Called when the user presses a mouse button.
+        The user will press a number on their keyboard
+        then that number will be placed on the board. 
         """
 
         # Change the x/y screen coordinates to grid coordinates
