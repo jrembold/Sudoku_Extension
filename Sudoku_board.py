@@ -1,13 +1,5 @@
 """
 Sudoku Board
-
-Show how to use a two-dimensional list/array to back the display of a
-grid on-screen.
-
-Faster drawing of a board. 
-
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.array_backed_grid_buffered
 """
 import arcade
 import Cameron
@@ -28,6 +20,7 @@ MARGIN = 6
 SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
 SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 SCREEN_TITLE = "Suduko Board 6x6"
+difficulty = input("Input easy, medium or hard: ")
 
 
 class MyGame(arcade.Window):
@@ -39,8 +32,10 @@ class MyGame(arcade.Window):
         """
         Set up the application.
         """
+        ## INIT FUNCTION ##
         super().__init__(width, height, title)
 
+        ## APPENDING THE SPRTIES ##
         self.shape_list = None
         self.num_key = 0
 
@@ -67,23 +62,11 @@ class MyGame(arcade.Window):
         #self.num_list.append(self.nine)
         self.print_numlist = arcade.SpriteList()
 
-
-        # Create a 2 dimensional array. A two dimensional
-        # array is simply a list of lists.
-
         ## ANSWER KEY ##
-        self.grid = Cameron.Generate_unique_board()
-        #self.answer = Cameron.Generate_unique_board()
-        
-        ## EMPTY BOARD ##
-        #self.grid = []
-        #for row in range(ROW_COUNT):
-        #    # Add an empty array that will hold each cell
-        #    # in this row
-        #    self.grid.append([])
-        #    for column in range(COLUMN_COUNT):
-        #        self.grid[row].append(0)  # Append a cell
+        self.answer = Cameron.Generate_unique_board()
+        self.grid = Cameron.Partial_solution(self.answer, difficulty)
 
+        ## GENERATES BACKGROUND ##
         arcade.set_background_color(arcade.color.BLACK)
         self.recreate_grid()
 
@@ -103,10 +86,8 @@ class MyGame(arcade.Window):
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
                 sprite = arcade.Sprite(f'Numbers/{self.grid[row][column]}.png', scale = 0.2)
-                
                 x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
                 y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
-
                 sprite.center_x = x
                 sprite.center_y = y
                 self.print_numlist.append(sprite)
@@ -119,9 +100,9 @@ class MyGame(arcade.Window):
         arcade.start_render()
         
 
-        #self.shape_list.draw()
         self.print_numlist.draw()
-        #arcade.draw_lrtb_rectangle_outline(5, SCREEN_WIDTH/2, SCREEN_HEIGHT-5, (2/3)*SCREEN_HEIGHT, arcade.color.SILVER, border_width=5)
+
+        ## LINES SEPARATING THE GRID ##
         arcade.draw_line(0, (2/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(2/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
         arcade.draw_line(0, (1/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(1/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
         arcade.draw_line((1/2)*SCREEN_WIDTH, 0, (1/2)*SCREEN_WIDTH,SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
@@ -134,8 +115,8 @@ class MyGame(arcade.Window):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
-        #don't use NUM_whatever bc that's a number pad
         
+        ## NUMBERS TO PRESS TO GENERATE BOARD ##
         elif key == arcade.key.KEY_1:
             self.num_key = 1
             return self.num_key
@@ -159,6 +140,8 @@ class MyGame(arcade.Window):
         elif key == arcade.key.KEY_6:
             self.num_key = 6
             return self.num_key
+        
+        
 
         #elif key == arcade.key.KEY_7:
         #    self.num_key = 7
