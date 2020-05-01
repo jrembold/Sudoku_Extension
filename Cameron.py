@@ -1,10 +1,9 @@
-### Generating the solution board ###
-
 import random
+
+### Generating the solution board ###
 
 # set numbers to letter in a dictionary so that we can shift the key 
 abc = {'a': 1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6}
-
 
 def Shift_dictionary( ):
     '''
@@ -83,10 +82,14 @@ def Generate_unique_board( ):
 
 
 ###  Remove random numbers from solution to show the board  ###
-sol = Generate_unique_board()
 def Partial_solution(solution):
     '''
-    Revomves 
+    Creates an easy, medium or hard parital solution to a sudoku board.
+
+    input:
+        solution (list): a list containing the solution to a sudoku board
+    output:
+        parital (list): list containg the partial solution to a sudoku board
 
     '''
     difficulty = input("Input easy, medium or hard: ")
@@ -96,11 +99,10 @@ def Partial_solution(solution):
         amount_to_be_removed = 36 - random.randint(13,17)
     elif difficulty == 'hard':
         amount_to_be_removed = 36 - random.randint(10,13)
+
     partial = solution.copy()
     for i in range(0, amount_to_be_removed):
         randomi = random.randint(0,5)
         randomj = random.randint(0,5)
         partial[randomi][randomj] = 0
     return partial
-
-print(Partial_solution(sol))
