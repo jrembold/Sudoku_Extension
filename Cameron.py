@@ -84,11 +84,13 @@ def Generate_unique_board( ):
 
 ###  Remove random numbers from solution to show the board  ###
 def Partial_solution(solution):
+    '''
+    Revomve 
+    '''
     partial = solution.copy()
-    amount_to_be_removed = random.randint(11,17)
+    amount_to_be_removed = 36 - random.randint(11,17)
     for i in range(0, amount_to_be_removed):
         randomi = random.randint(0,5)
         randomj = random.randint(0,5)
         partial[randomi][randomj] = 0
     return partial
-    
