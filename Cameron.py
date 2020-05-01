@@ -43,26 +43,27 @@ def Apply_shift(abcnew):
 
 
 def Mix_rows(rowsnew):
-    '''
-    Mixes the rows. 
+#     '''
+#     Mixes the rows. 
 
-    input:
-        rowsnew (tuple): tuple of rows with shifted values
-    output:
-        rowsmixed (tuple): the same rows but in a different order
+#     input:
+#         rowsnew (tuple): tuple of rows with shifted values
+#     output:
+#         rowsmixed (tuple): the same rows but in a different order
 
-    '''
-    rowsmixed = ( )
-    mix = random.randint(0,6)
-    for i in range(0,6):
-        row = i + 1
-        if (mix + row) >= 6:
-            newmix = mix - 6
-            rowsmixed += (rowsnew[i+ newmix], )
-        else:
-            rowsmixed += (rowsnew[i+ mix], )
+#     '''
+#     rowsmixed = ( )
+#     mix = random.randint(0,6)
+#     for i in range(0,6):
+#         row = i + 1
+#         if (mix + row) >= 6:
+#             newmix = mix - 6
+#             rowsmixed += (rowsnew[i+ newmix], )
+#         else:
+#             rowsmixed += (rowsnew[i+ mix], )
 
-    return rowsmixed
+#     return rowsmixed
+    return rowsnew
 
 
 def Generate_unique_board( ):
@@ -80,4 +81,6 @@ def Generate_unique_board( ):
 
     return UniqueBoard
 
-print(Generate_unique_board())
+
+###  Remove random numbers from solution to show the board  ###
+
