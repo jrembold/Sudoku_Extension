@@ -1,4 +1,4 @@
-## Generating the starting board, generate a solution and then show partially completed to screen - Cameron
+### Generating the solution board ###
 
 import random
 
@@ -38,7 +38,7 @@ def Apply_shift(abcnew):
     r4 = [abcnew['f'], abcnew['b'], abcnew['a'], abcnew['c'], abcnew['e'], abcnew['d']]
     r5 = [abcnew['b'], abcnew['f'], abcnew['e'], abcnew['d'], abcnew['c'], abcnew['a']]
     r6 = [abcnew['a'], abcnew['c'], abcnew['d'], abcnew['f'], abcnew['b'], abcnew['e']]
-    rows = (r1, r2, r3, r4, r5, r6)
+    rows = [r1, r2, r3, r4, r5, r6]
     return rows
 
 
@@ -80,7 +80,4 @@ def Generate_unique_board( ):
     UniqueBoard = Mix_rows(shiftedabc)
 
     return UniqueBoard
-
-
-###  Remove random numbers from solution to show the board  ###
 
