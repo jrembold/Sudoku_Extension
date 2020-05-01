@@ -73,6 +73,7 @@ class MyGame(arcade.Window):
 
         ## ANSWER KEY ##
         self.grid = Cameron.Generate_unique_board()
+        #self.answer = Cameron.Generate_unique_board()
         
         ## EMPTY BOARD ##
         #self.grid = []
@@ -83,8 +84,8 @@ class MyGame(arcade.Window):
         #    for column in range(COLUMN_COUNT):
         #        self.grid[row].append(0)  # Append a cell
 
-        #arcade.set_background_color(arcade.color.BLACK)
-        #self.recreate_grid()
+        arcade.set_background_color(arcade.color.BLACK)
+        self.recreate_grid()
 
     #Changing the color of the squares and placing them
     def recreate_grid(self):
@@ -116,10 +117,15 @@ class MyGame(arcade.Window):
         """
         # This command has to happen before we start drawing
         arcade.start_render()
+        
 
         #self.shape_list.draw()
         self.print_numlist.draw()
-
+        #arcade.draw_lrtb_rectangle_outline(5, SCREEN_WIDTH/2, SCREEN_HEIGHT-5, (2/3)*SCREEN_HEIGHT, arcade.color.SILVER, border_width=5)
+        arcade.draw_line(0, (2/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(2/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
+        arcade.draw_line(0, (1/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(1/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
+        arcade.draw_line((1/2)*SCREEN_WIDTH, 0, (1/2)*SCREEN_WIDTH,SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
+        
     def on_key_press(self, key, mod):
         '''
         The user will press a number on their keyboard
