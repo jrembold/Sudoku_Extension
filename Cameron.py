@@ -81,3 +81,19 @@ def Generate_unique_board( ):
 
     return UniqueBoard
 
+
+###  Remove random numbers from solution to show the board  ###
+rowsolution = Generate_unique_board()
+
+def Partial_solution(solution):
+    partial = solution
+    numbers = [1,2,3,4,5,6]
+    amountshown = random.randint(11,17)
+    removed = 0
+    
+
+     if removed >= amountshown:
+        return partial
+    
+
+print(Partial_solution(rowsolution))
