@@ -134,8 +134,8 @@ def Partial_solution(solution, difficulty):
 
 
 #Generate_unique_board()
-full = read_text('answertext2.txt')
-part = Partial_solution(read_text('answertext2.txt'),'hard')
+#full = read_text('answertext2.txt')
+#part = Partial_solution(read_text('answertext2.txt'),'hard')
 #print(part)
 
 def Hint_Generator(partial,full):
@@ -164,7 +164,7 @@ def Check_for_Completion(partial):
     return complete
 
 
-print(Check_for_Completion(part))
+#print(Check_for_Completion(part))
 
 #print(full)
 #print(Hint_Generator(part, full))
