@@ -43,27 +43,32 @@ def Apply_shift(abcnew):
 
 
 def Mix_rows(rowsnew):
-#     '''
-#     Mixes the rows. 
+    '''
+    Mixes the rows. 
 
-#     input:
-#         rowsnew (tuple): tuple of rows with shifted values
-#     output:
-#         rowsmixed (tuple): the same rows but in a different order
+    input:
+        rowsnew (tuple): tuple of rows with shifted values
+    output:
+        rowsmixed (tuple): the same rows but in a different order
 
-#     '''
-#     rowsmixed = ( )
-#     mix = random.randint(0,6)
-#     for i in range(0,6):
-#         row = i + 1
-#         if (mix + row) >= 6:
-#             newmix = mix - 6
-#             rowsmixed += (rowsnew[i+ newmix], )
-#         else:
-#             rowsmixed += (rowsnew[i+ mix], )
-
-#     return rowsmixed
-    return rowsnew
+    '''
+    rowsmixed = [] 
+    mix = random.randint(0,6)
+    if mix == 0:
+        rowsmixed = rowsnew
+    elif mix == 1:
+        rowsmixed = rowsnew[2:4] + rowsnew[4:6] + rowsnew[0:2]
+    elif mix == 2:
+        rowsmixed = rowsnew[4:6] + rowsnew[0:2] + rowsnew[2:4]
+    elif mix == 3:
+        rowsmixed = rowsnew[0:2] + rowsnew[4:6] + rowsnew[2:4]
+    elif mix == 4:
+        rowsmixed = rowsnew[2:4] + rowsnew[0:2] + rowsnew[4:6] 
+    elif mix == 5:
+        rowsmixed = rowsnew[4:6] + rowsnew[2:4] + rowsnew[0:2]
+    else:
+        rowsmixed = rowsnew
+    return rowsmixed
 
 
 def Generate_unique_board( ):
@@ -82,6 +87,8 @@ def Generate_unique_board( ):
     f.write(str(UniqueBoard))
     f.close()
     return UniqueBoard
+
+print(Generate_unique_board())
 
 def read_text(textfile):
     '''
@@ -165,7 +172,7 @@ def Partial_solution(solution, difficulty):
         amount_to_be_removed = 36 - random.randint(10,13)
     partial = solution.copy()
     for i in range(0, amount_to_be_removed):
-        randomi = random.randint(0,5)
+        randomi = random.randint(0,5) 
         randomj = random.randint(0,5)
         partial[randomi][randomj] = 0
     return partial
@@ -246,8 +253,5 @@ def Check_Accuracy(full,partial):
 
 #print(full)
 #print(Hint_Generator(part, full))
-
-
-
 
 
