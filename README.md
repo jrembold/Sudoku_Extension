@@ -2,6 +2,8 @@
 
 Sudoku board created by The Clever Computer Crusaders
 
-Main script: Sudokuboard.py
+Sudokuboard.py: Main script
 
-Script with functions to import: Cameron.py
+Cameron.py: Script with functions to import
+
+Numbers: Folder with the number sprites
