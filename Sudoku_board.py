@@ -3,7 +3,12 @@ Sudoku Board
 """
 import arcade
 import Cameron
+import time
+from datetime import date
 
+# Call today's date and convert to a string
+todaydt = date.today()
+today = todaydt.strftime("%d-%m-%Y")
 
 
 # Set how many rows and columns we will have
@@ -26,12 +31,33 @@ print('Welcome to Arcade Sudoku!')
 print('Instructions:')
 print('- Press the number on your keyboard that you would like to enter.')
 print('- Click the box in which you would like to enter the number.')
-print('--------------------------------------------')
-print("| To generate a hint | Press the 'h' key   |")
-print("| To close the game  | Press the 'Esc' key |")
-print('--------------------------------------------')
-difficulty = input("To select difficulty level, input easy, medium, or hard: ")
+print('-------------------------------------------------')
+print("| To generate a hint      | Press the 'h' key   |")
+print('-------------------------------------------------')
+print("| To save game to         |                     |")
+print("| continue later          | Press the 's' key   |")
+print('-------------------------------------------------')
+print("| To check your solution  |                     |")
+print("| after completing board  | Press the 'c' key   |")
+print('-------------------------------------------------')
+print("| To close game           | Press the 'Esc' key |")
+print('-------------------------------------------------')
 
+name = input('Name: ')
+game = input("New game or continue saved game? Input 'N' for new game and 'S' for : ")
+if game == 'N':
+    new = True
+    difficulty = input("To select difficulty level, input 'easy', 'medium', or 'hard': ")
+elif game == 'S':
+    new = False
+    file = input('Type in the exact name of the file (including .txt): ')
+
+
+if new == False:
+    s = open(file,'r')
+    all = s.readlines()
+    answer = all[0].strip('\n')
+    progress = all[1].strip('\n')
 
 class MyGame(arcade.Window):
     """
@@ -72,18 +98,25 @@ class MyGame(arcade.Window):
         #self.num_list.append(self.nine)
         self.print_numlist = arcade.SpriteList()
 
-        ## ANSWER KEY ##
-        self.answer = Cameron.Generate_unique_board()
-        self.grid = Cameron.Partial_solution(self.answer, difficulty)
-        self.fixed_answer = Cameron.read_text('answertext2.txt')
-#        a = open('answertext2.txt','r')
-#        for line in a:
-#            self.fixed_answer = line
-#        a.close()
+        # Define variables to check for completeness and accuracy
+        self.done = False
+        self.correct = False
+        self.incorrect = False
+ 
+        # If continuing saved game, convert strings from saved game file to lists and set equal to self.grid and self.fixed_answer
+        if new == False:
+            self.fixed_answer = Cameron.str_to_list(answer)           
+            self.grid = Cameron.str_to_list(progress)
+        # If starting new game, generate unique board and save solution to text file
+        elif new == True:
+            self.answer = Cameron.Generate_unique_board()
+            self.grid = Cameron.Partial_solution(self.answer, difficulty)
+            self.fixed_answer = Cameron.read_text('answer.txt')
 
         ## GENERATES BACKGROUND ##
         arcade.set_background_color(arcade.color.BLACK)
         self.recreate_grid()
+
     
 
 
@@ -96,9 +129,11 @@ class MyGame(arcade.Window):
         '''
         #self.shape_list = arcade.ShapeElementList()
     #    print("Key pressed: ",self.num_key) #key pressed
-    #    print("Current: ",self.grid) #answer grid
+        # print("Current: ",self.grid) #answer grid
+        # s = open('savedgame.txt','w')
+        # s.write(str(self.grid))
+        # s.close()
     #    print("Answer: ",self.fixed_answer)
-
 
 
         self.print_numlist = arcade.SpriteList()
@@ -110,7 +145,9 @@ class MyGame(arcade.Window):
                 sprite.center_x = x
                 sprite.center_y = y
                 self.print_numlist.append(sprite)
-     #   print(Cameron2.Check_for_Completion(self.grid))
+        # Check to see if all squares have been filled in
+        if Cameron.Check_for_Completion(self.grid) == True:
+           self.done = True
 
     def on_draw(self):
         """
@@ -119,13 +156,23 @@ class MyGame(arcade.Window):
         # This command has to happen before we start drawing
         arcade.start_render()
         
-
         self.print_numlist.draw()
 
         ## LINES SEPARATING THE GRID ##
         arcade.draw_line(0, (2/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(2/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
         arcade.draw_line(0, (1/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(1/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
         arcade.draw_line((1/2)*SCREEN_WIDTH, 0, (1/2)*SCREEN_WIDTH,SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
+
+        # Final screen telling user if they won or lost
+        if self.correct == True:
+            arcade.draw_rectangle_filled(SCREEN_WIDTH//2, SCREEN_HEIGHT//2, SCREEN_WIDTH-MARGIN, SCREEN_HEIGHT-MARGIN, arcade.color.BLUE_YONDER)
+            arcade.draw_text('Congratulations!!',300,300+50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
+            arcade.draw_text('You won!',300,300-50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
+        elif self.incorrect == True:
+            arcade.draw_rectangle_filled(SCREEN_WIDTH//2, SCREEN_HEIGHT//2, SCREEN_WIDTH-MARGIN, SCREEN_HEIGHT-MARGIN, arcade.color.BLUE_YONDER)
+            arcade.draw_text('You lost :(',300,300+50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
+            arcade.draw_text('Try again!',300,300-50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
+
 
     def on_key_press(self, key, mod):
         '''
@@ -137,10 +184,26 @@ class MyGame(arcade.Window):
             self.grid = Cameron.Hint_Generator(self.grid, self.fixed_answer)
             self.recreate_grid()
 
-        if key == arcade.key.ESCAPE:
+        # Close window
+        elif key == arcade.key.ESCAPE:
             arcade.close_window()
 
-        
+        # Check accuracy after filling in all the squares
+        elif key == arcade.key.C:
+            if Cameron.Check_Accuracy(self.fixed_answer, self.grid) == True:
+                print('You won!')
+                self.correct = True
+            else:
+                print('Incorrect :(')
+                self.incorrect = True
+
+        # Save progress to a text file
+        elif key == arcade.key.S:
+            s = open(name+'_'+today+'.txt','w')
+            s.write(str(self.fixed_answer)+'\n')
+            s.write(str(self.grid))
+            s.close()
+            
         ## NUMBERS TO PRESS TO GENERATE BOARD ##
         elif key == arcade.key.KEY_1:
             self.num_key = 1
@@ -165,7 +228,6 @@ class MyGame(arcade.Window):
         elif key == arcade.key.KEY_6:
             self.num_key = 6
             return self.num_key
-        
         
 
         #elif key == arcade.key.KEY_7:
@@ -192,7 +254,7 @@ class MyGame(arcade.Window):
         column = int(x // (WIDTH + MARGIN))
         row = int(y // (HEIGHT + MARGIN))
 
-        print(f"Click coordinates: ({x}, {y}). Grid coordinates: ({row}, {column})")
+   #     print(f"Click coordinates: ({x}, {y}). Grid coordinates: ({row}, {column})")
 
         # Make sure we are on-grid. It is possible to click in the upper right
         # corner in the margin and go to a grid location that doesn't exist
@@ -209,7 +271,6 @@ class MyGame(arcade.Window):
                 self.grid[row][column] = 0
 
         self.recreate_grid() 
-
 
 
 

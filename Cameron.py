@@ -78,12 +78,21 @@ def Generate_unique_board( ):
     newdict = Shift_dictionary( )
     shiftedabc = Apply_shift(newdict)
     UniqueBoard = Mix_rows(shiftedabc)
-    f = open('answertext2.txt', 'w')
+    f = open('answer.txt', 'w')
     f.write(str(UniqueBoard))
     f.close()
     return UniqueBoard
 
 def read_text(textfile):
+    '''
+    A function to read in a string from the saved game text file and convert it into a list of lists of rows
+
+    Inputs:
+        textfile (str): type in the name of the text file (including the .txt)
+
+    Outputs:
+        all (list): a list of the lists that contain row entries
+    '''
     o = open(textfile, 'r')
     for line in o:
         fixed_answer = line
@@ -109,6 +118,34 @@ def read_text(textfile):
     return all
 
 
+def str_to_list(string):
+    '''
+    A function to convert a string directly to a list (not from the text file as above)
+
+    Inputs:
+        string (str): the string to be converted into a list
+
+    Outputs:
+        all (list): a list of the lists that contain row entries
+    '''
+    s = string.split(',')
+    l1 = []
+    for i in s:
+        l1.append(i.strip(']'))
+    l2 = []
+    for q in l1:
+        l2.append(q.strip(' ['))
+    nums = []
+    for l in l2:
+        nums.append(int(l))
+    r1 = nums[:6]
+    r2 = nums[6:12]
+    r3 = nums[12:18]
+    r4 = nums[18:24]
+    r5 = nums[24:30]
+    r6 = nums[30:36]
+    all = [r1, r2, r3, r4, r5, r6]
+    return all
 
 
 ###  Remove random numbers from solution to show the board  ###
@@ -118,6 +155,7 @@ def Partial_solution(solution, difficulty):
     Revomves 
 
     '''
+    amount_to_be_removed = 36
     #difficulty = input("Input easy, medium or hard: ")
     if difficulty == "easy":
         amount_to_be_removed = 36 - random.randint(17,20)
@@ -139,6 +177,17 @@ def Partial_solution(solution, difficulty):
 #print(part)
 
 def Hint_Generator(partial,full):
+    '''
+    A function to generate enter a correct number into a blank spot to give a hint.
+
+    Inputs:
+        partial (list): the list of numbers currently displayed on the screen (current progress)
+        full (list): the list of correct rows
+
+    Outputs:
+        partial (list): the list of number current displayed on the screen, with one blank box
+            filled in as the hint
+    '''
     blanks = ()
     for i in range(0,6):
         for j in range(0,6):
@@ -153,15 +202,44 @@ def Hint_Generator(partial,full):
     return partial
 
 def Check_for_Completion(partial):
-    complete = False
+    '''
+    A function to check the grid for completion
+
+    Inputs:
+        partial (list): the list of numbers currently displayed on the screen (current progress)
+
+    Outputs: 
+        check (Boolean): returns True if complete, False if incomplete
+    '''
+    check = False
+    complete = []
     for i in range(0,6):
         for j in range(0,6):
             if partial[i][j] == 0:
-                complete = False
-                break
+                complete.append(0)
             else:
-                complete = True
-    return complete
+                complete.append(1)
+    if 0 not in complete:
+        check = True
+    return check
+
+def Check_Accuracy(full,partial):
+    '''
+    A function to check the accuracy of the numbers displayed on the screen
+
+    Inputs:
+        partial (list): the list of numbers currently displayed on the screen (current progress)
+        full (list): the list of correct rows
+    
+    Outputs:
+        (Boolean): returns True if solution is correct, False if solution is incorrect
+    '''
+    if full == partial:
+        return True
+    else:
+        return False
+
+
 
 
 #print(Check_for_Completion(part))
