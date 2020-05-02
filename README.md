@@ -2,7 +2,7 @@
 
 Sudoku board created by The Clever Computer Crusaders
 
-Sudokuboard.py: Main script
+Sudoku_Board.py: Main script
 
 Cameron.py: Script with functions to import
 
