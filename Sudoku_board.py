@@ -2,7 +2,7 @@
 Sudoku Board
 """
 import arcade
-import Cameron2
+import Cameron
 
 
 
@@ -73,9 +73,9 @@ class MyGame(arcade.Window):
         self.print_numlist = arcade.SpriteList()
 
         ## ANSWER KEY ##
-        self.answer = Cameron2.Generate_unique_board()
-        self.grid = Cameron2.Partial_solution(self.answer, difficulty)
-        self.fixed_answer = Cameron2.read_text('answertext2.txt')
+        self.answer = Cameron.Generate_unique_board()
+        self.grid = Cameron.Partial_solution(self.answer, difficulty)
+        self.fixed_answer = Cameron.read_text('answertext2.txt')
 #        a = open('answertext2.txt','r')
 #        for line in a:
 #            self.fixed_answer = line
@@ -134,7 +134,7 @@ class MyGame(arcade.Window):
         '''
         ## Hint Generator
         if key == arcade.key.H:
-            self.grid = Cameron2.Hint_Generator(self.grid, self.fixed_answer)
+            self.grid = Cameron.Hint_Generator(self.grid, self.fixed_answer)
             self.recreate_grid()
 
         if key == arcade.key.ESCAPE:
