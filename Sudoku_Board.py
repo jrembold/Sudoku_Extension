@@ -27,6 +27,8 @@ MARGIN = 6
 SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
 SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 SCREEN_TITLE = "Suduko Board 6x6"
+
+#Instructions that print ot the terminal
 print('Welcome to Arcade Sudoku!')
 print('Instructions:')
 print('- Press the number on your keyboard that you would like to enter.')
@@ -121,8 +123,6 @@ class MyGame(arcade.Window):
         self.recreate_grid()
 
     
-
-
     #Changing the color of the squares and placing them
     def recreate_grid(self):
         '''
@@ -130,14 +130,6 @@ class MyGame(arcade.Window):
         and populates a SpriteList based on what is in each row/column
 
         '''
-        #self.shape_list = arcade.ShapeElementList()
-    #    print("Key pressed: ",self.num_key) #key pressed
-        # print("Current: ",self.grid) #answer grid
-        # s = open('savedgame.txt','w')
-        # s.write(str(self.grid))
-        # s.close()
-    #    print("Answer: ",self.fixed_answer)
-
 
         self.print_numlist = arcade.SpriteList()
         for row in range(ROW_COUNT):
@@ -169,14 +161,10 @@ class MyGame(arcade.Window):
         # Final screen telling user if they won or lost
         if self.correct == True:
             arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.win)
-            #arcade.draw_rectangle_filled(SCREEN_WIDTH//2, SCREEN_HEIGHT//2, SCREEN_WIDTH-MARGIN, SCREEN_HEIGHT-MARGIN, arcade.color.BLUE_YONDER)
-            #arcade.draw_text('Congratulations!!',300,300+50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
-            #arcade.draw_text('You won!',300,300-50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
+           
         elif self.incorrect == True:
             arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.lost)
-            #arcade.draw_rectangle_filled(SCREEN_WIDTH//2, SCREEN_HEIGHT//2, SCREEN_WIDTH-MARGIN, SCREEN_HEIGHT-MARGIN, arcade.color.BLUE_YONDER)
-            #arcade.draw_text('You lost :(',300,300+50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
-            #arcade.draw_text('Try again!',300,300-50,arcade.color.BLACK_BEAN, 40, align="center", anchor_x="center")
+            
 
 
     def on_key_press(self, key, mod):
@@ -265,8 +253,6 @@ class MyGame(arcade.Window):
         # corner in the margin and go to a grid location that doesn't exist
         # AKA: make sure you are clicking w/in the grid - TH
         if row < ROW_COUNT and column < COLUMN_COUNT:
-            #print(f'Center-x of num_key', self.num_key.center_x, '. Center-y of num_key', self.num_key.center_y)
-            #print(f'Name of pic', str(self.num_key))
             # Flip the location between 1 and 0.
             # this will reset value for the recreate grid
             # and change the color  - TH
