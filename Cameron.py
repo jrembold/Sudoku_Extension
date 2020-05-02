@@ -49,7 +49,7 @@ def Mix_rows(rowsnew):
     input:
         rowsnew (tuple): tuple of rows with shifted values
     output:
-        rowsmixed (tuple): the same rows but in a different order
+        rowsmixed (tuple): the same rows but in a different order (keeping rows 1&2, 3&4, 5&6 grouped together)
 
     '''
     rowsmixed = [] 
@@ -253,5 +253,6 @@ def Check_Accuracy(full,partial):
 
 #print(full)
 #print(Hint_Generator(part, full))
+
 
 
