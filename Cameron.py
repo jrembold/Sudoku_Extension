@@ -78,12 +78,41 @@ def Generate_unique_board( ):
     newdict = Shift_dictionary( )
     shiftedabc = Apply_shift(newdict)
     UniqueBoard = Mix_rows(shiftedabc)
-
+    f = open('answertext2.txt', 'w')
+    f.write(str(UniqueBoard))
+    f.close()
     return UniqueBoard
+
+def read_text(textfile):
+    o = open(textfile, 'r')
+    for line in o:
+        fixed_answer = line
+
+    s = fixed_answer.split(',')
+    l1 = []
+    for i in s:
+        l1.append(i.strip(']'))
+    l2 = []
+    for q in l1:
+        l2.append(q.strip(' ['))
+    nums = []
+    for l in l2:
+        nums.append(int(l))
+
+    r1 = nums[:6]
+    r2 = nums[6:12]
+    r3 = nums[12:18]
+    r4 = nums[18:24]
+    r5 = nums[24:30]
+    r6 = nums[30:36]
+    all = [r1, r2, r3, r4, r5, r6]
+    return all
+
+
 
 
 ###  Remove random numbers from solution to show the board  ###
-sol = Generate_unique_board()
+#sol = Generate_unique_board()
 def Partial_solution(solution, difficulty):
     '''
     Revomves 
@@ -103,4 +132,44 @@ def Partial_solution(solution, difficulty):
         partial[randomi][randomj] = 0
     return partial
 
-#print(Partial_solution(sol))
+
+#Generate_unique_board()
+full = read_text('answertext2.txt')
+part = Partial_solution(read_text('answertext2.txt'),'hard')
+#print(part)
+
+def Hint_Generator(partial,full):
+    blanks = ()
+    for i in range(0,6):
+        for j in range(0,6):
+            if partial[i][j] == 0:
+                blanks += ((i,j),)
+    coords = random.choice(blanks)
+    r = coords[0]
+    c = coords[1]
+    val = full[r][c]
+
+    partial[r][c] = val
+    return partial
+
+def Check_for_Completion(partial):
+    complete = False
+    for i in range(0,6):
+        for j in range(0,6):
+            if partial[i][j] == 0:
+                complete = False
+                break
+            else:
+                complete = True
+    return complete
+
+
+print(Check_for_Completion(part))
+
+#print(full)
+#print(Hint_Generator(part, full))
+
+
+
+
+

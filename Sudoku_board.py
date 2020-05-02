@@ -2,7 +2,9 @@
 Sudoku Board
 """
 import arcade
-import Cameron
+import Cameron2
+
+
 
 # Set how many rows and columns we will have
 ROW_COUNT = 6
@@ -20,7 +22,15 @@ MARGIN = 6
 SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
 SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 SCREEN_TITLE = "Suduko Board 6x6"
-difficulty = input("Input easy, medium or hard: ")
+print('Welcome to Arcade Sudoku!')
+print('Instructions:')
+print('- Press the number on your keyboard that you would like to enter.')
+print('- Click the box in which you would like to enter the number.')
+print('--------------------------------------------')
+print("| To generate a hint | Press the 'h' key   |")
+print("| To close the game  | Press the 'Esc' key |")
+print('--------------------------------------------')
+difficulty = input("To select difficulty level, input easy, medium, or hard: ")
 
 
 class MyGame(arcade.Window):
@@ -63,12 +73,19 @@ class MyGame(arcade.Window):
         self.print_numlist = arcade.SpriteList()
 
         ## ANSWER KEY ##
-        self.answer = Cameron.Generate_unique_board()
-        self.grid = Cameron.Partial_solution(self.answer, difficulty)
+        self.answer = Cameron2.Generate_unique_board()
+        self.grid = Cameron2.Partial_solution(self.answer, difficulty)
+        self.fixed_answer = Cameron2.read_text('answertext2.txt')
+#        a = open('answertext2.txt','r')
+#        for line in a:
+#            self.fixed_answer = line
+#        a.close()
 
         ## GENERATES BACKGROUND ##
         arcade.set_background_color(arcade.color.BLACK)
         self.recreate_grid()
+    
+
 
     #Changing the color of the squares and placing them
     def recreate_grid(self):
@@ -78,8 +95,10 @@ class MyGame(arcade.Window):
 
         '''
         #self.shape_list = arcade.ShapeElementList()
-        print(self.num_key) #key pressed
-        print(self.grid) #answer grid
+    #    print("Key pressed: ",self.num_key) #key pressed
+    #    print("Current: ",self.grid) #answer grid
+    #    print("Answer: ",self.fixed_answer)
+
 
 
         self.print_numlist = arcade.SpriteList()
@@ -91,6 +110,7 @@ class MyGame(arcade.Window):
                 sprite.center_x = x
                 sprite.center_y = y
                 self.print_numlist.append(sprite)
+     #   print(Cameron2.Check_for_Completion(self.grid))
 
     def on_draw(self):
         """
@@ -106,12 +126,17 @@ class MyGame(arcade.Window):
         arcade.draw_line(0, (2/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(2/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
         arcade.draw_line(0, (1/3)*SCREEN_HEIGHT, SCREEN_WIDTH,(1/3)*SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
         arcade.draw_line((1/2)*SCREEN_WIDTH, 0, (1/2)*SCREEN_WIDTH,SCREEN_HEIGHT, arcade.color.SILVER, line_width=7)
-        
+
     def on_key_press(self, key, mod):
         '''
         The user will press a number on their keyboard
         that number will be used to generate a new sprite
         '''
+        ## Hint Generator
+        if key == arcade.key.H:
+            self.grid = Cameron2.Hint_Generator(self.grid, self.fixed_answer)
+            self.recreate_grid()
+
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
@@ -154,6 +179,7 @@ class MyGame(arcade.Window):
         #elif key == arcade.key.KEY_9:
         #    self.num_key = 9
         #    return self.num_key
+    
 
     def on_mouse_press(self, x, y, button, modifiers):
         """
@@ -183,6 +209,7 @@ class MyGame(arcade.Window):
                 self.grid[row][column] = 0
 
         self.recreate_grid() 
+
 
 
 
