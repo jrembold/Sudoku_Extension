@@ -2,8 +2,6 @@
 
 import random
 
-# set numbers to letter in a dictionary so that we can shift the key 
-abc = {'a': 1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6}
 
 
 def Shift_dictionary( ):
@@ -15,12 +13,22 @@ def Shift_dictionary( ):
     output:
         abc (dict): shifted num dictionary
     '''
-    shift = random.randint(1,6)
+    # set numbers to letter in a dictionary so that we can shift the key 
+    abc = {'a': 1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6}
+    # shift = random.randint(1,6)
+    # for key in abc:
+    #     abc[key] += shift
+    #     if abc[key] > 6:
+    #         abc[key] -= 6
+    # return abc
+    list16 = [1,2,3,4,5,6]
+    random.shuffle(list16)
+    number = 0
     for key in abc:
-        abc[key] += shift
-        if abc[key] > 6:
-            abc[key] -= 6
+        abc[key] = list16[number]
+        number += 1
     return abc
+
 
 
 def Apply_shift(abcnew):
