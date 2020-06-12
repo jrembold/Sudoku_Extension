@@ -1,4 +1,5 @@
 # Project_Group_C
+(with small updates by Jed)
 
 Sudoku board created by The Clever Computer Crusaders
 
