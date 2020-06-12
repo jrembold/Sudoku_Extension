@@ -12,7 +12,6 @@ class SuDoku:
             self.difficulty = int((self.size / 1.25) ** 2)
         else:
             self.difficulty = int((self.size / 2) ** 2)
-        print(self.difficulty)
         self.divs = div  # (rows,col)
         if div[0] * div[1] != size:
             raise ValueError("Can not split puzzle into requested sections")

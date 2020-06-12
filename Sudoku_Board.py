@@ -13,8 +13,13 @@ today = todaydt.strftime("%d-%m-%Y")
 
 
 # Set how many rows and columns we will have
-ROW_COUNT = 6
-COLUMN_COUNT = 6
+SIZE = 9
+ROW_COUNT = SIZE
+COLUMN_COUNT = SIZE
+
+# Divisions
+DIV_ROW = 3
+DIV_COL = 3
 
 # This sets the WIDTH and HEIGHT of each grid location
 WIDTH = 100
@@ -81,29 +86,6 @@ class MyGame(arcade.Window):
         self.shape_list = None
         self.num_key = 0
 
-        self.num_list = []
-        self.zero = arcade.Sprite("Numbers/0.png")
-        self.one = arcade.Sprite("Numbers/1.png")
-        self.two = arcade.Sprite("Numbers/2.png")
-        self.three = arcade.Sprite("Numbers/3.png")
-        self.four = arcade.Sprite("Numbers/4.png")
-        self.five = arcade.Sprite("Numbers/5.png")
-        self.six = arcade.Sprite("Numbers/6.png")
-        # self.seven = arcade.Sprite('Numbers/7.png')
-        # self.eight = arcade.Sprite('Numbers/8.png')
-        # self.nine = arcade.Sprite('Numbers/9.png')
-        self.num_list.append(self.zero)
-        self.num_list.append(self.one)
-        self.num_list.append(self.two)
-        self.num_list.append(self.three)
-        self.num_list.append(self.four)
-        self.num_list.append(self.five)
-        self.num_list.append(self.six)
-        # self.num_list.append(self.seven)
-        # self.num_list.append(self.eight)
-        # self.num_list.append(self.nine)
-        self.print_numlist = arcade.SpriteList()
-
         self.win = arcade.load_texture("Numbers/won.png")
         self.lost = arcade.load_texture("Numbers/lost.png")
 
@@ -112,20 +94,18 @@ class MyGame(arcade.Window):
         self.correct = False
         self.incorrect = False
 
+        self.current_selected = None
+
         # If continuing saved game, convert strings from saved game file to lists and set equal to self.grid and self.fixed_answer
         if new == False:
             self.fixed_answer = Cameron.str_to_list(answer)
             self.grid = Cameron.str_to_list(progress)
         # If starting new game, generate unique board and save solution to text file
         elif new == True:
-            self.board = SuDoku(6, (2, 3), difficulty)
+            self.board = SuDoku(SIZE, (DIV_ROW, DIV_COL), difficulty)
             self.answer = self.board.get_solution()
             self.grid = self.board.get_puzzle()
             self.fixed_answer = self.answer
-
-            # self.answer = Cameron.Generate_unique_board()
-            # self.grid = Cameron.Partial_solution(self.answer, difficulty)
-            # self.fixed_answer = Cameron.read_text("answer.txt")
 
         ## GENERATES BACKGROUND ##
         arcade.set_background_color(arcade.color.BLACK)
@@ -151,7 +131,8 @@ class MyGame(arcade.Window):
                 sprite.center_y = y
                 self.print_numlist.append(sprite)
         # Check to see if all squares have been filled in
-        if Cameron.Check_for_Completion(self.grid) == True:
+        if 0 not in self.grid:
+            # if Cameron.Check_for_Completion(self.grid) == True:
             self.done = True
 
     def on_draw(self):
@@ -163,31 +144,39 @@ class MyGame(arcade.Window):
 
         self.print_numlist.draw()
 
+        ## Row/Column/Section Indicators
+        if self.current_selected:
+            x = self.current_selected[1] * (WIDTH + MARGIN) + MARGIN / 2
+            y = self.current_selected[0] * (HEIGHT + MARGIN) + MARGIN / 2
+            # Row
+            arcade.draw_lrtb_rectangle_filled(
+                0, SCREEN_WIDTH, y + HEIGHT + MARGIN, y, (200, 0, 0, 20)
+            )
+            # Column
+            arcade.draw_lrtb_rectangle_filled(
+                x, x + WIDTH + MARGIN, SCREEN_HEIGHT, 0, (0, 200, 0, 20)
+            )
+            # Section
+            sec_row = self.current_selected[0] // DIV_ROW
+            sec_col = self.current_selected[1] // DIV_COL
+            start_x = sec_col * (WIDTH + MARGIN) * DIV_COL
+            start_y = sec_row * (HEIGHT + MARGIN) * DIV_ROW
+            end_x = start_x + (WIDTH + MARGIN) * DIV_COL
+            end_y = start_y + (HEIGHT + MARGIN) * DIV_ROW
+            arcade.draw_lrtb_rectangle_filled(
+                start_x, end_x, end_y, start_y, (0, 0, 200, 20)
+            )
+
         ## LINES SEPARATING THE GRID ##
-        arcade.draw_line(
-            0,
-            (2 / 3) * SCREEN_HEIGHT,
-            SCREEN_WIDTH,
-            (2 / 3) * SCREEN_HEIGHT,
-            arcade.color.SILVER,
-            line_width=7,
-        )
-        arcade.draw_line(
-            0,
-            (1 / 3) * SCREEN_HEIGHT,
-            SCREEN_WIDTH,
-            (1 / 3) * SCREEN_HEIGHT,
-            arcade.color.SILVER,
-            line_width=7,
-        )
-        arcade.draw_line(
-            (1 / 2) * SCREEN_WIDTH,
-            0,
-            (1 / 2) * SCREEN_WIDTH,
-            SCREEN_HEIGHT,
-            arcade.color.SILVER,
-            line_width=7,
-        )
+        # Horizontal
+        for i in range(SIZE // DIV_ROW + 1):
+            yloc = (i / DIV_COL) * SCREEN_HEIGHT
+            arcade.draw_line(0, yloc, SCREEN_WIDTH, yloc, arcade.color.SILVER, 7)
+
+        # Vertical
+        for i in range(SIZE // DIV_COL + 1):
+            xloc = (i / DIV_ROW) * SCREEN_WIDTH
+            arcade.draw_line(xloc, 0, xloc, SCREEN_HEIGHT, arcade.color.SILVER, 7)
 
         # Final screen telling user if they won or lost
         if self.correct == True:
@@ -199,6 +188,17 @@ class MyGame(arcade.Window):
             arcade.draw_lrwh_rectangle_textured(
                 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.lost
             )
+
+    def on_update(self, dt):
+        """
+        Continually check if done and if so run the checker and
+        display the final message.
+        """
+        if self.done:
+            if (self.grid == self.answer).all():
+                self.correct = True
+            else:
+                self.incorrect = True
 
     def on_key_press(self, key, mod):
         """
@@ -232,29 +232,37 @@ class MyGame(arcade.Window):
             s.close()
 
         ## NUMBERS TO PRESS TO GENERATE BOARD ##
-        elif key == arcade.key.KEY_1:
-            self.num_key = 1
-            return self.num_key
+        elif key in range(arcade.key.KEY_1, arcade.key.KEY_9 + 1):
+            if self.current_selected:
+                self.grid[self.current_selected] = key % arcade.key.KEY_1 + 1
 
-        elif key == arcade.key.KEY_2:
-            self.num_key = 2
-            return self.num_key
+        elif key == arcade.key.BACKSPACE:
+            if self.current_selected:
+                self.grid[self.current_selected] = 0
+        self.recreate_grid()
+        # elif key == arcade.key.KEY_1:
+        # self.num_key = 1
+        # return self.num_key
 
-        elif key == arcade.key.KEY_3:
-            self.num_key = 3
-            return self.num_key
+        # elif key == arcade.key.KEY_2:
+        # self.num_key = 2
+        # return self.num_key
 
-        elif key == arcade.key.KEY_4:
-            self.num_key = 4
-            return self.num_key
+        # elif key == arcade.key.KEY_3:
+        # self.num_key = 3
+        # return self.num_key
 
-        elif key == arcade.key.KEY_5:
-            self.num_key = 5
-            return self.num_key
+        # elif key == arcade.key.KEY_4:
+        # self.num_key = 4
+        # return self.num_key
 
-        elif key == arcade.key.KEY_6:
-            self.num_key = 6
-            return self.num_key
+        # elif key == arcade.key.KEY_5:
+        # self.num_key = 5
+        # return self.num_key
+
+        # elif key == arcade.key.KEY_6:
+        # self.num_key = 6
+        # return self.num_key
 
         # elif key == arcade.key.KEY_7:
         #    self.num_key = 7
@@ -289,10 +297,11 @@ class MyGame(arcade.Window):
             # Flip the location between 1 and 0.
             # this will reset value for the recreate grid
             # and change the color  - TH
-            if self.grid[row][column] == 0:
-                self.grid[row][column] = self.num_key
-            else:
-                self.grid[row][column] = 0
+            # if self.grid[row][column] == 0:
+            # self.grid[row][column] = self.num_key
+            # else:
+            # self.grid[row][column] = 0
+            self.current_selected = (row, column)
 
         self.recreate_grid()
 
